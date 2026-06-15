@@ -1,0 +1,307 @@
+// llm.abe — pluggable LLM backend (default: Claude Messages API)
+//
+// HONEST POSTURE: This is a pluggable LLM backend. As shipped it points
+// at Anthropic's Messages API, but llmChat() is the single swap point —
+// any hosted or self-hosted LLM (a local Llama/Mistral via an OpenAI-
+// compatible endpoint, an on-device model, etc.) can be wired in by
+// replacing the httpPostWithHeaders call below. Claude was picked for
+// the reference deployment because:
+//   1. It actually knows Kinyarwanda (the locally-available open
+//      models did not — aya-expanse:8b produced morphology-shaped
+//      non-words; llama3.1:8b drifted into Swahili).
+//   2. Clinical reasoning quality is high enough that the LLM-driven
+//      endpoints (/v1/danger non-severe was already deterministic;
+//      /v1/prevention and /v1/report use LLM prose) can rely on it
+//      without a fallback layer.
+//
+// Trade-off the demo accepts in this build (with the hosted backend):
+//   - online-only (a self-hosted / on-device backend would relax this)
+//   - per-request API cost
+//   - small additional latency (Anthropic API ~1–3s vs local ~3–7s
+//     for llama3.1:8b on CPU, so latency actually IMPROVES)
+//
+// API key handling:
+//   The key is read from the configured key file (see apiKeyPath())
+//   at every call, or supplied directly via the ANTHROPIC_API_KEY env
+//   var (no caching at startup — the read is cheap and lets the user
+//   rotate the key without restarting the daemon). The file is
+//   gitignored. If the file is missing or empty, llmChat returns ""
+//   so callers fall back to deterministic prose / fallback behaviour.
+//
+// Switching to a different backend is localized to llmChat() —
+// replace the httpPostWithHeaders call with a call to whatever
+// inference endpoint or in-process API your chosen model exposes.
+//
+// E-Tools AI Corporation | v4.1 | 2026
+
+// ── Configuration accessors ─────────────────────────────────────────────────
+function claudeUrl():     string { return "https://api.anthropic.com/v1/messages"; }
+// Switched from claude-sonnet-4-6 to claude-haiku-4-5 to cut latency
+// from ~10s to ~3s on /v1/prevention and /v1/report. Token generation
+// dominates the response time; Haiku emits tokens ~3x faster than
+// Sonnet at a small quality cost on free-form prose, which is
+// acceptable for the prose-around-deterministic-anchor work these two
+// endpoints do (safety-critical paths are all deterministic templates).
+function claudeModel():   string { return "claude-haiku-4-5-20251001"; }
+function claudeVersion(): string { return "2023-06-01"; }
+// The key file path comes from the ANTHROPIC_API_KEY_PATH env var. If it
+// is unset, fall back to /etc/malariachat/anthropic-key (a conventional
+// system location). No absolute home-directory paths are baked in.
+// getEnv returns "" when unset, never NULL.
+function apiKeyPath(): string {
+    const fromEnv = getEnv("ANTHROPIC_API_KEY_PATH");
+    if (fromEnv.length() > 0) return fromEnv;
+    return "/etc/malariachat/anthropic-key";
+}
+
+// ── API key loader ──────────────────────────────────────────────────────────
+// Prefers the key supplied directly via the ANTHROPIC_API_KEY env var;
+// otherwise reads it from the key file (path from apiKeyPath). Trailing
+// whitespace is trimmed so a trailing newline (common in shell-written
+// files) doesn't make it into the header value.
+
+function loadApiKey(): string {
+    const fromEnv = getEnv("ANTHROPIC_API_KEY");
+    if (fromEnv.length() > 0) return fromEnv.trim();
+    const raw = readFileSync(apiKeyPath(), "utf8");
+    if (raw.length() == 0) return "";
+    return raw.trim();
+}
+
+// ── JSON string escape ──────────────────────────────────────────────────────
+function jsonEscapeForLlm(s: string): string {
+    let out = s.replace("\\", "\\\\");
+    out = out.replace("\"", "\\\"");
+    out = out.replace("\n", "\\n");
+    out = out.replace("\r", "\\r");
+    out = out.replace("\t", "\\t");
+    return out;
+}
+
+// ── Response parsing ────────────────────────────────────────────────────────
+// Anthropic Messages API response shape (success):
+//   {"id":"msg_01...", "type":"message", "role":"assistant",
+//    "model":"claude-sonnet-4-6",
+//    "content":[{"type":"text", "text":"<the actual reply>"}],
+//    "stop_reason":"end_turn", ...}
+//
+// We extract the body of the first content block's "text" field. The
+// substring approach mirrors the Ollama parser this file used to have:
+// locate `"text":"`, then locate the closing `"}` that terminates the
+// content block. Works without per-character scanning (Abe v4.1 has
+// no .charCodeAt) and is stable for the response shape we receive.
+
+function extractClaudeText(json: string): string {
+    const opener = "\"text\":\"";
+    const start  = json.indexOf(opener);
+    if (start < 0) return "";
+    const valueStart = start + opener.length();
+    const tail = json.substring(valueStart, json.length());
+    // The text value ends at the first `"}` (close of the content
+    // block object). Adjacent fields like "type" might also contain
+    // `"}`, but Anthropic's response always emits the text block as
+    // {"type":"text","text":"..."} — text is the LAST field in the
+    // block, so its closing `"` is followed immediately by `}`.
+    let closeRel: i64 = tail.indexOf("\"}");
+    if (closeRel < 0) return "";
+    const raw = tail.substring(0, closeRel);
+    let out = raw.replace("\\\\", "");
+    out     = out.replace("\\\"", "\"");
+    out     = out.replace("\\/",  "/");
+    out     = out.replace("\\n",  "\n");
+    out     = out.replace("\\r",  "\r");
+    out     = out.replace("\\t",  "\t");
+    out     = out.replace("\\b",  "\b");
+    out     = out.replace("\\f",  "\f");
+    out     = out.replace("", "\\");
+    return out;
+}
+
+// ── Smart-quote → ASCII normalization ────────────────────────────────────────
+function normalizeSmartQuotes(s: string): string {
+    let out = s.replace("“", "\"");
+    out     = out.replace("”", "\"");
+    out     = out.replace("‘", "'");
+    out     = out.replace("’", "'");
+    out     = out.replace("—", "-");
+    out     = out.replace("–", "-");
+    return out;
+}
+
+// ── Helpers exported for system-prompt construction ─────────────────────────
+
+// langFull("en") → "English"; langFull("rw") → "Kinyarwanda". Callers
+// typically interpolate this into the system prompt (e.g.
+// "Respond in: {langFull(lang)}.").
+export function langFull(lang: string): string {
+    if (lang == "rw") return "Kinyarwanda";
+    if (lang == "sw") return "Swahili";
+    if (lang == "fr") return "French";
+    return "English";
+}
+
+// swStyleGuide() — Swahili conventions for malariaChat output. Phase A
+// teaching-mode draft, UNREVIEWED by a native Swahili clinician. The
+// rules below are conservative defaults aimed at preventing the
+// hallucination patterns that bit the Kinyarwanda work (invented
+// neologisms, wrong-register verbs, code-switched English loanwords
+// where a native term exists). Native review is Phase B work.
+export function swStyleGuide(): string {
+    return "Swahili style conventions for MalariaChat output (Phase A, "
+         + "TEACHING MODE — content is the WHO 2024 baseline, not a "
+         + "country-specific protocol; native-speaker review pending):\n"
+         + "- Use Standard Tanzanian/Kenyan Swahili (sanifu). Avoid Sheng, "
+         + "avoid Coastal-dialect-specific vocabulary.\n"
+         + "- \"malaria\" is the correct Swahili term — it is a "
+         + "well-established loanword; do not coin \"ugonjwa wa mbu\" "
+         + "or other substitutes.\n"
+         + "- For pregnancy: \"ujauzito\" (pregnancy), \"mjamzito\" / "
+         + "\"mwanamke mjamzito\" (pregnant woman), \"wajawazito\" "
+         + "(pregnant women, plural). For CHWs collectively: just use "
+         + "\"watoa huduma za afya\" (health-care workers) or the "
+         + "context-specific role.\n"
+         + "- For dose: \"dozi\" (loanword, standard).\n"
+         + "- For tablet: \"kidonge\" (sg), \"vidonge\" (pl). \"vidonge "
+         + "3\" = 3 tablets.\n"
+         + "- For weight: \"uzito\" or \"kilo\". \"mtoto wa kilo 12\" "
+         + "(a child of 12 kg).\n"
+         + "- For weeks (of pregnancy): \"wiki\". \"wiki ya 13 ya "
+         + "ujauzito\" (week 13 of pregnancy).\n"
+         + "- For refer / send to a clinician: \"mpeleke kwa daktari\" "
+         + "or \"wapeleke hospitalini\". Do NOT use \"tuma kwa "
+         + "daktari\" (a request to the doctor) — wrong direction.\n"
+         + "- For \"RDT positive\": \"RDT chanya\" or \"kipimo cha RDT "
+         + "kimethibitisha\". Loanword RDT stays in capitals.\n"
+         + "- Acronyms: keep RBC, WHO, IPTp, SP, AL, RTS,S, R21, ANC "
+         + "in capitals. The Kinyarwanda-side rules about \"za RBC\" "
+         + "and \"z'RBC\" do NOT apply to Swahili — Swahili uses \"ya "
+         + "RBC\" / \"ya WHO\" naturally.\n"
+         + "- Vocabulary closure: use ONLY the conventions above plus "
+         + "standard Tanzanian/Kenyan Swahili. Do NOT coin Swahili "
+         + "neologisms. If a term you need is not in this guide and "
+         + "you are uncertain, use the English term unchanged rather "
+         + "than invent a word. PHASE A TEACHING MODE — content has "
+         + "not been reviewed by a native Swahili clinician; flag any "
+         + "uncertainty conservatively.\n";
+}
+
+// rwStyleGuide() — the established Kinyarwanda conventions block that
+// every system prompt should include when responding in RW. Single
+// source of truth. Update HERE when native-speaker review establishes
+// new conventions; all RW-generating system prompts pick up
+// the change automatically. Callers inject this into the system
+// prompt only when lang=="rw" — adds zero tokens for EN responses.
+export function rwStyleGuide(): string {
+    return "Kinyarwanda style conventions for MalariaChat output:\n"
+         + "- CHWs collectively: \"Inshuti z'Ubuzima\" (plural); vocative \"Nshuti z'Ubuzima,\".\n"
+         + "- \"RDT ni pozitifu\" / \"RDT iri pozitive\" (not \"RDT yiza\") for positive RDT.\n"
+         + "- \"doze\" not \"dose\"; \"Trimestre\" not \"Trimester\".\n"
+         + "- \"afite ibiro Nkg\" for \"has weight N kg\".\n"
+         + "- \"ohereza umurwayi byihuse ku bitaro\" for non-severe referral imperative.\n"
+         + "- \"mwohereze ku bitaro\" for severe.\n"
+         + "- \"muhe\" imperative for \"give\"; \"kumuha\" singular when giving to one patient.\n"
+         + "- \"Imiti y'ibinyampeke\" for granule formulation; \"Umuti wo kunywa mu mazi\" for oral suspension.\n"
+         + "- Province EN→RW translation (use when paraphrasing a structured result whose `province` field is in English):\n"
+         + "    Western  → Iburengerazuba\n"
+         + "    Eastern  → Iburasirazuba\n"
+         + "    Southern → Amajyepfo\n"
+         + "    Northern → Amajyaruguru\n"
+         + "    Kigali   → Umujyi wa Kigali (city, NOT a province — do not write \"Mu Ntara y'Kigali\")\n"
+         + "  Do not substitute one province for another. Kayonza is Eastern → Iburasirazuba; never Amajyepfo.\n"
+         + "- Person descriptor on weight bands: \"umwana w'ibiro X-<Y\" (child <24kg); \"umuntu mukuru w'ibiro X-<Y\" (adult >=24kg).\n"
+         + "- Connector before \"kiciro\": \"cy'\" before vowel-initial words, \"cya\" before consonant-initial.\n"
+         + "- Time-of-dose: \"kw'isaha ya mbere\" / \"kw'isaha ya munani\" (not \"ku isaha 0\" / \"ku masaha 8\").\n"
+         + "- \"n'ibiryo birimo amavuta\" (fat-containing food) for AL.\n"
+         + "- \"itemewe\" for \"contraindicated\" (not \"idakwiye\").\n"
+         + "- \"malariya\" is the Kinyarwanda for \"malaria\". Phrases: \"afite malariya\" (has malaria), \"indwara ya malariya\" (the disease malaria). Do NOT write \"amadini\" (that means \"religions\"), \"amalariya\", \"amadiniya\", or any other variant.\n"
+         + "- Do NOT add a separate diagnosis sentence. \"RDT iri pozitive\" already states the diagnosis — do not embellish with \"arwaye malariya\" / \"has malaria\" unless the structured result explicitly carries that phrasing.\n"
+         + "- Orthography: write \"za nyuma\" as two words (NOT \"zanyuma\"). The connector \"za\" stays separate from the following word.\n"
+         + "- Acronym contraction: write \"za RBC\" / \"ya RBC\" with the full preposition. Do NOT contract to \"z'RBC\" / \"y'RBC\". The apostrophe contraction (z' / y' / etc.) is for vowel-elision before a vowel-initial word; \"RBC\" is read as the letters R-B-C, starting on a consonant.\n"
+         + "- Verb form: imperative \"check / examine (you-plural)\" is \"musuzume\" — NOT \"murisuzume\". Do not insert a spurious \"-ri-\" infix.\n"
+         + "- Register: \"gusanga\" / \"mwamusanze\" (\"to find / you found\") is for finding a PERSON or a PLACE. Do NOT use it for system markers, abstract states, or configuration values. \"mwamusanze PLACEHOLDER\" is wrong register.\n"
+         + "- \"ibisanzwe\" is the idiomatic Kinyarwanda for English \"by default\" / \"ordinarily\". It is INVARIANT — does NOT take noun-class agreement. Both \"ibisanzwe ni Itsinda A\" (the default is Group A) and \"Itsinda A (ibisanzwe)\" (Group A — the default one) are correct, even though Itsinda A is singular. The strictly-grammatical singular agreement form \"irisanzwe\" exists but is less natural; prefer \"ibisanzwe\".\n"
+         + "- For pregnant-women / CHW audiences, prefer \"mu mezi atatu ya mbere y'ubutwite\" (in the first three months of pregnancy) over \"mu cyiciro cya mbere cy'ubutwite\" or \"mu gihembwe cya mbere\". The clinical loanwords `icyiciro` / `igihembwe` for \"trimester\" don't reliably land with pregnant women who think in months. Three-months phrasing is more accurate and accessible.\n"
+         + "- For HIV/AIDS status, prefer \"barwaye SIDA\" (are sick with AIDS — emphasises the disease) over \"bafite SIDA\" (have AIDS — possessive, ambiguous between virus and disease). Clinical framing wants `-rwaye` (the verb root for being sick), not `-fite` (to possess).\n"
+         + "- For referrals to a clinician/clinic, prefer \"kwa muganga\" (to the clinician — directional) over \"kuri muganga\" (literally \"on/at the clinician\"). And when the referral is about a specific cohort just described, name them with an antecedent: \"Abo babyeyi ubohereza kwa muganga\" (those mothers, refer them to the clinician) reads more naturally than a bare imperative.\n"
+         + "- For DOT (directly observed therapy), do NOT translate the abbreviation or write \"umuti utangwa hose imbere y'amaso\" or similar literal renderings. Use a concrete patient-centred clause: \"Umubyeyi afatira uwo muti imbere y'inshuti y'ubuzima, igihe umubyeyi aje kwivuza\" (the mother takes the drug in front of the CHW when she comes for care). This makes the DOT mechanic legible without the jargon.\n"
+         + "- When citing the protocol document, write \"amabwiriza ya RBC 2024\" (the RBC 2024 guidelines), not just \"RBC 2024\". The word `amabwiriza` (guidelines) anchors the reference; bare \"RBC 2024\" reads as the body's name, not the document.\n"
+         + "- Use ONLY the vocabulary above plus standard Kinyarwanda. Do NOT coin Kinyarwanda neologisms. If a term you need isn't in this guide and you're uncertain, use the English term unchanged rather than invent a word. Specifically forbidden examples of recent hallucinations: \"ibisrobertson\", \"ubwiyunge\" (instead of doze/imiti), \"amasato\", \"amadini\" (means \"religions\", NOT malaria), \"Manikiwe\", \"idositra\" (instead of doze), \"atukurikiza\", \"murisuzume\" (correct form is \"musuzume\"), \"zanyuma\" (write as two words \"za nyuma\"), \"z'RBC\" (write as \"za RBC\"), \"mwamusanze\" used on a non-person (wrong register) — none of these are valid Kinyarwanda for the contexts they appear in; do not produce words like them. The pattern \"Mu- / Atu- / I- + invented stem\" is a recurring failure mode — if you find yourself reaching for a prefix-stem combination you can't verify, OMIT instead.";
+}
+
+// Build the messages-array string for the Anthropic request body.
+// conversationJson is an already-JSON-formatted array (e.g.
+// '[{"role":"user","content":"..."},...]') from prior chat turns;
+// "[]" or "" means no history. The current user message is appended
+// as the final turn. The function does NOT validate the input JSON
+// shape — callers are responsible for emitting well-formed history.
+function buildMessagesArray(conversationJson: string, userMessage: string): string {
+    const trimmed = conversationJson.trim();
+    const userTurn = "{\"role\":\"user\",\"content\":\""
+                   + jsonEscapeForLlm(userMessage) + "\"}";
+    if (trimmed.length() == 0 || trimmed == "[]") {
+        return "[" + userTurn + "]";
+    }
+    // Strip the trailing "]" and append the new turn.
+    const woClose = trimmed.substring(0, trimmed.length() - 1);
+    return woClose + "," + userTurn + "]";
+}
+
+// ── Main entry point ─────────────────────────────────────────────────────────
+// Returns the model's text reply on success, "" on any failure
+// (missing API key, network error, non-2xx response, missing content
+// field). Callers must treat "" as "model unavailable, fall back to
+// deterministic protocol response or hard-error".
+//
+// This signature is the backend swap point: any alternative LLM
+// backend (hosted or self-hosted) implements the same shape — only
+// the function BODY changes.
+//
+// system           : the system prompt (caller-built; for RW responses
+//                    it should already include rwStyleGuide()).
+// conversationJson : prior turns as a JSON array, e.g.
+//                    '[{"role":"user","content":"..."}, ...]'. Use
+//                    "[]" or "" for single-turn / no history.
+// user             : the user message body to append as the latest turn.
+// maxTokens        : caps response length (Anthropic max_tokens).
+export function llmChat(system: string,
+                        conversationJson: string,
+                        user: string,
+                        maxTokens: i64): string {
+    const apiKey = loadApiKey();
+    if (apiKey.length() == 0) {
+        // No key configured — fail soft. Caller should already handle
+        // empty-string return as "fall back to deterministic prose".
+        return "";
+    }
+
+    // Anthropic Messages API request body.
+    const messages = buildMessagesArray(conversationJson, user);
+    const body = "{"
+        + "\"model\":\"" + claudeModel() + "\","
+        + "\"max_tokens\":" + maxTokens + ","
+        + "\"system\":\"" + jsonEscapeForLlm(system) + "\","
+        + "\"messages\":" + messages
+        + "}";
+
+    // Required headers: x-api-key + anthropic-version + content-type.
+    // The content-type is added automatically by the runtime wrapper
+    // but explicit is fine and overrides cleanly.
+    const headers = "x-api-key: " + apiKey + "\r\n"
+                  + "anthropic-version: " + claudeVersion() + "\r\n"
+                  + "content-type: application/json\r\n";
+
+    const resp = httpPostWithHeaders(claudeUrl(), body, headers);
+    if (!httpResponseOk(resp)) {
+        httpResponseFree(resp);
+        return "";
+    }
+    const text = httpResponseText(resp);
+    httpResponseFree(resp);
+    if (text.length() == 0) return "";
+
+    const content = extractClaudeText(text);
+    if (content.length() == 0) return "";
+
+    let cleaned = normalizeSmartQuotes(content);
+    return cleaned.trim();
+}

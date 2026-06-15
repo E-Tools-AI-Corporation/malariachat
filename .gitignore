@@ -1,0 +1,15 @@
+# Secrets / keys — never commit
+*.pem
+*.key
+anthropic-key
+
+# Build artifacts (compiled binary at repo root; keep the .abe source)
+*.o
+*.ll
+/malariachat
+/tmp/
+
+# Editor / OS junk
+*.swp
+*~
+.DS_Store

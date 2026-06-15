@@ -1,0 +1,40 @@
+# /etc/systemd/system/malariachat.service
+# Supervises the malariaChat Abe daemon as a long-running service.
+# Listens on 127.0.0.1:8444; Caddy reverse-proxies HTTPS → 8444.
+
+[Unit]
+Description=MalariaChat — Abe runtime (RBC 2024 / WHO 2024 teaching mode)
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=malariachat
+Group=malariachat
+WorkingDirectory=/opt/malariachat
+ExecStart=/opt/malariachat/malariachat
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# The daemon reads ./ui/index.html, ./schema/*.sql, and connects to
+# Postgres on the loopback interface. It also reads the LLM API key
+# from /etc/malariachat/anthropic-key — the default location
+# apiKeyPath() in llm.abe uses when ANTHROPIC_API_KEY_PATH is unset.
+# (You can instead pass the key inline via the ANTHROPIC_API_KEY env
+# var, e.g. an Environment= line or an EnvironmentFile=.)
+
+# Conservative hardening — the daemon doesn't need privileges beyond
+# its own working directory + the API-key file.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/malariachat
+# Allow reading /etc/malariachat (read-only) so loadApiKey() works
+# under ProtectSystem=strict.
+ReadOnlyPaths=/etc/malariachat
+
+[Install]
+WantedBy=multi-user.target

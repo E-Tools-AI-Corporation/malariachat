@@ -1,0 +1,1604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAADrklEQVR42u1WX2jbVRT+zrm//Flwk80Nu05s7GTKQPbQraOjiNqyxtGMCp2CsAz2YPHF1woidE++aCCzax82JwPBVdoKYtkGIlZhFRyuW1lM+mC71XXpGpq265o//d17fEjNkiypmay+6Hn68bv3nu+e833fvZdEBOsZjHWO/xyAGIhZTwBiEEP04wYQASD3bmcGj5iZUZCC0YA8xgoEgCTn9MSlTH+bDveBFQSVtIvLb1q01gUuISb3FkAyF99dGf4QkEraVQLAGAOAiJRSRJT7AwDGBinasNm+cjIzeESWYiAFYz8CgIgws9Y6FosNDQ1NTU1prVlZyJUiAqPJs83c+iHd97q5PQK2IGUpKQYgokgkopQa/nG4tbV1YHBQKRWN/AYi4rzJxoZ7M+7PZAba7WufgRRAJSlRXV1d2S+tNTMHg8H29vb5+flzZ87ejc+OhyMTNyc73um4nzbNTfvSv5xmpR54QjlArMe/wfJdVfMK2AGjQbxWBV6vl5UKBoM3M3MvBVoWNiIUCqXSqedqa3NFFvgORJ6t9rWz6f42WZgEqyLaOb85IlK7s5ZEdh1qaPuq68Wjzf4vPtjz9kECVVdvNyL5yR8o2Njk2Sp3rqT7DunJ70Eqv1ecUw4zBwKBAw0H9Iq9+7jv929/7vd13jh3adexZqfL+Ybf729qcjldpck0NlybkFla+fpN+9deEOcw+GGNFpD5V1fESIXWLV6as1KW5AsXLxz2H37et3//iUAqseR+auPox/1jX3536vTnHUdfS/bUK4e7BBJbSC/As81x8FPlbYKYHNVWkUYXFxYFEh26nJiYfnrvC/GxiTtXxwHYmZUypiewkuU4P9Pg9PXSk16IBqncsFU0fXp62rPBs6++/vLwT3PhSYAaGxvHrl+PzczAGBAVbJ8YYmQ5bu057nj1IygXjAarYusWRTQaFZFPgkEAne93ish4NCIiJh5OntyR7PYmu2uS3TXJnp3J0PZkqHpl9MzqSqMfzkZFl76IZPWaSCRGRkbq6uqqqqpWNT8bzpxvATsAAVtIJbDpWaevh3c0QLL+orVIzhcS5wlJANE2K8vM3sicb4FygkiW48rb7Gg5RU9Uwdhgq5yKSgxksxuRLBIREbPk1CJaUvesve85Xj6xelyXz14aILvr7HFddCFLao7cW5y+XrX7LYhATL5gyl4sfx/GiIhZ/CM90K5jV0VEtC1iKllK/+RlV6j0tcN65GcLUHn20ir6/+n4LwP8CRXjRVh5OzL3AAAAAElFTkSuQmCC">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<title>MalariaChat — Rwanda CHW assistant</title>
+<style>
+  :root {
+    --bg:           #0e1218;
+    --panel:        #161c24;
+    --panel-soft:   #1c2530;
+    --border:       #2a3340;
+    --text:         #d8dee6;
+    --muted:        #8b96a4;
+    --accent:       #4ad79a;
+    --accent-soft:  rgba(74, 215, 154, 0.10);
+    --warn:         #f4b152;
+    --danger:       #ee5a5a;
+    --info:         #4a8aff;
+    --info-soft:    rgba(74, 138, 255, 0.10);
+    --code-bg:      #0a0d12;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    flex-direction: row;
+  }
+  .chat-column {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  aside.chats-panel {
+    flex: 0 0 260px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  aside.chats-panel .new-chat-btn {
+    margin: 14px 14px 10px;
+    padding: 10px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid rgba(74, 215, 154, 0.30);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+  }
+  aside.chats-panel .new-chat-btn:hover {
+    background: rgba(74, 215, 154, 0.18);
+  }
+  aside.chats-panel .chats-list-area {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 4px 10px;
+  }
+  aside.chats-panel .chats-list-placeholder {
+    padding: 18px 4px;
+    color: var(--muted);
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  aside.chats-panel .chat-row {
+    padding: 8px 10px;
+    margin: 2px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  aside.chats-panel .chat-row:hover {
+    background: var(--panel-soft);
+  }
+  aside.chats-panel .chat-row.active {
+    background: var(--accent-soft);
+    border-color: rgba(74, 215, 154, 0.30);
+  }
+  aside.chats-panel .chat-row-title {
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+  }
+  aside.chats-panel .chat-row-meta {
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  aside.chats-panel .panel-footer {
+    flex: 0 0 auto;
+    padding: 10px 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+  aside.chats-panel .settings-icon-btn {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  aside.chats-panel .settings-icon-btn:hover {
+    background: var(--panel-soft);
+    color: var(--text);
+  }
+  aside.chats-panel .settings-icon-btn .gear {
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 22px 18px;
+    width: min(420px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .modal h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .modal .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .modal label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .modal label .req { color: var(--danger); margin-left: 3px; }
+  .modal input[type="text"],
+  .modal input[type="email"],
+  .modal input[type="tel"],
+  .modal select {
+    background: var(--panel-soft);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 13px;
+  }
+  .modal input:focus, .modal select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .modal input.invalid {
+    border-color: var(--danger);
+  }
+  .modal .field-error {
+    font-size: 11px;
+    color: var(--danger);
+    min-height: 14px;
+  }
+  .modal .lang-toggle {
+    display: flex;
+    gap: 6px;
+  }
+  .modal .lang-toggle .lang-pill {
+    flex: 1 1 0;
+    text-align: center;
+  }
+  .modal .lang-toggle .lang-pill.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .modal .country-warn {
+    margin-top: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: var(--warn);
+    background: rgba(244, 177, 82, 0.08);
+    border: 1px solid rgba(244, 177, 82, 0.30);
+    border-radius: 6px;
+    line-height: 1.4;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .modal-actions button {
+    background: var(--panel-soft);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .modal-actions button.primary {
+    background: var(--accent);
+    color: #0a1218;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .modal-actions button:hover {
+    filter: brightness(1.1);
+  }
+  @media (max-width: 720px) {
+    body { flex-direction: column; }
+    aside.chats-panel {
+      flex: 0 0 auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      max-height: 40vh;
+    }
+  }
+  header {
+    padding: 14px 24px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  header h1 .accent { color: var(--accent); }
+  header .sub {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .lang-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .lang-pill {
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: var(--panel-soft);
+    border: 1px solid var(--border);
+    user-select: none;
+  }
+  .lang-pill.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .offline-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(244, 177, 82, 0.10);
+    color: var(--warn);
+    border: 1px solid rgba(244, 177, 82, 0.30);
+  }
+  .review-banner {
+    margin: 12px 24px 0;
+    padding: 10px 14px;
+    background: rgba(238, 90, 90, 0.10);
+    border-left: 3px solid var(--danger);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text);
+  }
+  main {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .bubble {
+    max-width: min(680px, 88%);
+    padding: 10px 14px;
+    border-radius: 14px;
+    line-height: 1.55;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  .bubble.user {
+    align-self: flex-end;
+    background: var(--accent-soft);
+    border: 1px solid rgba(74, 215, 154, 0.30);
+    border-bottom-right-radius: 4px;
+    color: var(--text);
+  }
+  .bubble.assistant {
+    align-self: flex-start;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .bubble.system {
+    align-self: center;
+    background: var(--info-soft);
+    border: 1px solid rgba(74, 138, 255, 0.30);
+    color: var(--info);
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  .bubble .meta-row {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .bubble .meta-chip {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+  }
+  .bubble .meta-chip.danger {
+    color: var(--danger);
+    border-color: rgba(238, 90, 90, 0.3);
+  }
+  .bubble .meta-chip.warn {
+    color: var(--warn);
+    border-color: rgba(244, 177, 82, 0.3);
+  }
+  .bubble .structured-details {
+    margin-top: 10px;
+  }
+  .bubble .structured-details summary {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 12px;
+    user-select: none;
+  }
+  .bubble .structured-details pre {
+    margin-top: 8px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font: 11px/1.55 ui-monospace, Menlo, Consolas, monospace;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+  .typing-dots {
+    align-self: flex-start;
+    padding: 12px 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .typing-dots .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--muted);
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: blink 1.2s infinite;
+  }
+  .typing-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0.3; }
+    40% { opacity: 1; }
+  }
+  footer.input-bar {
+    flex: 0 0 auto;
+    padding: 14px 24px;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  textarea#messageInput {
+    flex: 1 1 auto;
+    background: var(--panel-soft);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font: inherit;
+    resize: none;
+    min-height: 40px;
+    max-height: 160px;
+  }
+  textarea#messageInput:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  button#sendBtn {
+    background: var(--accent);
+    color: #0a1218;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 40px;
+  }
+  button#sendBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .empty-state {
+    align-self: center;
+    color: var(--muted);
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 14px;
+    max-width: 520px;
+  }
+  .empty-state h2 {
+    margin: 0 0 12px;
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .empty-state .examples {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+  }
+  .empty-state .examples code {
+    color: var(--accent);
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  a { color: var(--info); }
+  a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<aside class="chats-panel">
+  <button class="new-chat-btn" id="newChatBtn"></button>
+  <div class="chats-list-area" id="chatsListArea">
+    <div class="chats-list-placeholder" id="chatsListPlaceholder"></div>
+  </div>
+  <div class="panel-footer">
+    <button class="settings-icon-btn" id="openSettingsBtn">
+      <span class="gear">⚙</span>
+      <span id="settingsBtnLabel"></span>
+    </button>
+  </div>
+</aside>
+
+<div class="chat-column">
+  <header>
+    <div class="brand">
+      <h1>Malaria<span class="accent">Chat</span></h1>
+      <div class="sub" id="headerSub"></div>
+    </div>
+    <div class="lang-row">
+      <span class="offline-badge" id="offlineBadge" style="display:none;"></span>
+    </div>
+  </header>
+
+  <div class="review-banner" id="reviewBanner"></div>
+
+  <main id="thread">
+    <div class="empty-state" id="emptyState">
+      <h2 id="welcomeTitle"></h2>
+      <div id="welcomeBody"></div>
+      <div class="examples" id="welcomeExamples"></div>
+    </div>
+  </main>
+
+  <footer class="input-bar">
+    <textarea id="messageInput" rows="1" spellcheck="false"></textarea>
+    <button id="sendBtn"></button>
+  </footer>
+</div>
+
+<div class="modal-backdrop" id="settingsModalBackdrop" style="display:none;">
+  <div class="modal" id="settingsModal" role="dialog" aria-modal="true">
+    <h3 id="settingsTitle"></h3>
+
+    <div class="field">
+      <label for="settingName" id="settingNameLabel"></label>
+      <input type="text" id="settingName" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="field">
+      <label for="settingEmail">
+        <span id="settingEmailLabel"></span><span class="req">*</span>
+      </label>
+      <input type="email" id="settingEmail" autocomplete="off" spellcheck="false">
+      <div class="field-error" id="settingEmailError"></div>
+    </div>
+
+    <div class="field">
+      <label for="settingPhone" id="settingPhoneLabel"></label>
+      <input type="tel" id="settingPhone" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="field">
+      <label for="settingCountry" id="settingCountryLabel"></label>
+      <select id="settingCountry">
+        <option value="RW">Rwanda</option>
+        <option value="TZ">Tanzania (teaching)</option>
+        <option value="KE">Kenya (teaching)</option>
+        <option value="UG">Uganda (teaching, English only)</option>
+        <option value="ZM">Zambia (teaching, English only)</option>
+        <option value="BI">Burundi (teaching, French only)</option>
+        <option value="CD">DRC (teaching, French only)</option>
+      </select>
+      <div class="country-warn" id="countryWarn" style="display:none;"></div>
+    </div>
+
+    <div class="field" id="settingDistrictField">
+      <label for="settingDistrict" id="settingDistrictLabel"></label>
+      <select id="settingDistrict">
+        <option value="" id="districtUnsetOption"></option>
+        <optgroup id="districtGroupA" label="Group A">
+          <option value="Bugesera">Bugesera</option>
+          <option value="Gasabo">Gasabo</option>
+          <option value="Gatsibo">Gatsibo</option>
+          <option value="Gicumbi">Gicumbi</option>
+          <option value="Kayonza">Kayonza</option>
+          <option value="Kicukiro">Kicukiro</option>
+          <option value="Kirehe">Kirehe</option>
+          <option value="Ngoma">Ngoma</option>
+          <option value="Nyagatare">Nyagatare</option>
+          <option value="Nyarugenge">Nyarugenge</option>
+          <option value="Rwamagana">Rwamagana</option>
+        </optgroup>
+        <optgroup id="districtGroupB" label="Group B">
+          <option value="Gisagara">Gisagara</option>
+          <option value="Huye">Huye</option>
+          <option value="Kamonyi">Kamonyi</option>
+          <option value="Muhanga">Muhanga</option>
+          <option value="Nyamagabe">Nyamagabe</option>
+          <option value="Nyanza">Nyanza</option>
+          <option value="Nyaruguru">Nyaruguru</option>
+          <option value="Ruhango">Ruhango</option>
+        </optgroup>
+        <optgroup id="districtGroupC" label="Group C">
+          <option value="Burera">Burera</option>
+          <option value="Gakenke">Gakenke</option>
+          <option value="Karongi">Karongi</option>
+          <option value="Musanze">Musanze</option>
+          <option value="Ngororero">Ngororero</option>
+          <option value="Nyabihu">Nyabihu</option>
+          <option value="Nyamasheke">Nyamasheke</option>
+          <option value="Rubavu">Rubavu</option>
+          <option value="Rulindo">Rulindo</option>
+          <option value="Rusizi">Rusizi</option>
+          <option value="Rutsiro">Rutsiro</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="field">
+      <label id="settingLangLabel"></label>
+      <div class="lang-toggle">
+        <span class="lang-pill" data-lang="en">English</span>
+        <span class="lang-pill" data-lang="rw">Kinyarwanda</span>
+        <span class="lang-pill" data-lang="sw">Kiswahili</span>
+        <span class="lang-pill" data-lang="fr">Français</span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button id="modalCancelBtn"></button>
+      <button id="modalSaveBtn" class="primary"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let conversationId = null;
+let activeLang     = 'en';
+let sending        = false;
+let chatsList      = [];    // Cached result of the last /v1/chats fetch.
+
+// activeConversationId is persisted to localStorage so a page reload
+// reopens the same chat. This is a separate key from settings — the
+// settings change rarely, the active chat changes constantly.
+const ACTIVE_CONV_KEY = 'malariaChat.activeConversationId.v1';
+
+function setActiveConversation(id) {
+  conversationId = id || null;
+  try {
+    if (conversationId) localStorage.setItem(ACTIVE_CONV_KEY, conversationId);
+    else                localStorage.removeItem(ACTIVE_CONV_KEY);
+  } catch (e) { /* ignore */ }
+  highlightActiveChat();
+}
+
+// Settings (Settings modal — gear icon at bottom-left of the chats
+// sidebar). Persisted to localStorage and sent with every /v1/chat
+// POST. country='RW' is the only supported value; anything else
+// triggers the "not supported yet" UX and the server-side short-circuit.
+const SETTINGS_KEY_V1 = 'malariaChat.settings.v1';
+const SETTINGS_KEY_V2 = 'malariaChat.settings.v2';
+let settings = { userName: '', email: '', phone: '', country: 'RW', district: '', lang: 'en' };
+
+// modalPending: snapshot of settings while the modal is open. All
+// modal-field changes update modalPending; Save commits to settings,
+// Cancel discards. Null when modal is closed.
+let modalPending = null;
+
+function loadSettings() {
+  try {
+    const rawV2 = localStorage.getItem(SETTINGS_KEY_V2);
+    if (rawV2) {
+      applyParsedSettings(JSON.parse(rawV2));
+    } else {
+      // v1 migration: read v1 and write v2 once, so the user keeps
+      // their previously-saved name/country/district/lang.
+      const rawV1 = localStorage.getItem(SETTINGS_KEY_V1);
+      if (rawV1) {
+        applyParsedSettings(JSON.parse(rawV1));
+        saveSettings();
+      }
+    }
+  } catch (e) { /* ignore corrupt storage; defaults apply */ }
+  // Enforce country↔language constraints at load time, so a user
+  // who previously saved {country: UG, lang: sw} or {country: BI,
+  // lang: en} doesn't see a half-working UI on the next visit.
+  if (isEnglishOnlyCountry(settings.country) && settings.lang !== 'en') {
+    settings.lang = 'en';
+  } else if (isFrenchOnlyCountry(settings.country) && settings.lang !== 'fr') {
+    settings.lang = 'fr';
+  }
+  activeLang = settings.lang;
+}
+
+function applyParsedSettings(p) {
+  if (!p || typeof p !== 'object') return;
+  if (typeof p.userName === 'string') settings.userName = p.userName;
+  if (typeof p.email    === 'string') settings.email    = p.email;
+  if (typeof p.phone    === 'string') settings.phone    = p.phone;
+  if (typeof p.country  === 'string') settings.country  = p.country;
+  if (typeof p.district === 'string') settings.district = p.district;
+  if (p.lang === 'en' || p.lang === 'rw' || p.lang === 'sw' || p.lang === 'fr') settings.lang = p.lang;
+}
+
+function saveSettings() {
+  try { localStorage.setItem(SETTINGS_KEY_V2, JSON.stringify(settings)); }
+  catch (e) { /* quota or disabled storage — keep going in memory */ }
+}
+
+// ── Localised UI strings ───────────────────────────────────────────────────
+const LABELS = {
+  en: {
+    headerSub: 'Rwanda CHW assistant — RBC 2024 protocol — synthetic data',
+    headerSubTeaching: '{country} — teaching mode — WHO 2024 baseline — synthetic data',
+    sendBtn:   'Send',
+    placeholder: 'Ask MalariaChat…  (e.g. "Kayonza, child 22kg RDT positive, no danger signs")',
+    placeholderTeaching: 'Ask MalariaChat…  (e.g. "child 22kg RDT positive, no danger signs")',
+    reviewBanner: '<strong>[PROTOCOL_REVIEW_REQUIRED]</strong> Every MalariaChat reply requires CHW supervisor / clinical staff review before action. Dose, severity and pregnancy answers come from the RBC 2024 deterministic engine; the LLM only paraphrases them.',
+    reviewBannerTeaching: '<strong>[Teaching mode]</strong> MalariaChat is in teaching mode for {country}. Clinical content shown is the WHO Global Malaria Programme 2024 baseline; for clinical use in {country}, consult the national malaria control programme guidelines. Synthetic / demo data only.',
+    welcomeTitle: 'Ask anything malaria-related',
+    welcomeBody: '<p>Triage, dose questions, pregnancy trimester, district first-line drug, IPTp, vaccines — or any open-ended question. Clinical answers are computed deterministically; the model just rewords them for chat.</p>',
+    welcomeBodyTeaching: '<p>Triage, dose questions, pregnancy trimester, IPTp, vaccines — or any open-ended question about malaria. Clinical answers are computed deterministically from the WHO 2024 baseline; the model just rewords them for chat.</p>',
+    welcomeExamples: '<div>Try:</div><div><code>Kayonza child 22kg RDT positive</code></div><div><code>pregnant 8 weeks RDT positive</code></div><div><code>What is IPTp?</code></div><div><code>convulsion and unable to drink</code></div>',
+    welcomeExamplesTeaching: '<div>Try:</div><div><code>child 22kg RDT positive</code></div><div><code>pregnant 8 weeks RDT positive</code></div><div><code>What is IPTp?</code></div><div><code>convulsion and unable to drink</code></div>',
+    offlineBadge: '🔌 LLM offline — deterministic only',
+    typing: 'MalariaChat is thinking…',
+    networkError: '⚠️  network error — could not reach /v1/chat. Please retry.',
+    structuredDetailsLabel: 'Structured response (from {endpoint})',
+    intentBadge: { dose: 'dose', danger: 'severe-gate', pregnancy: 'pregnancy', 'first-line': 'first-line', iptp: 'IPTp', vaccines: 'vaccines', open: 'open Q&A', 'country-not-supported': 'country not supported' },
+    settingsTitle:    'Settings',
+    settingNameLabel: 'User name',
+    settingNamePh:    'e.g. Jeanne',
+    settingEmailLabel: 'Email',
+    settingEmailPh:   'e.g. jeanne@health.rw',
+    settingPhoneLabel: 'Phone (optional)',
+    settingPhonePh:   'e.g. +250 7XX XXX XXX',
+    emailRequiredError: 'Email is required.',
+    emailInvalidError:  'Please enter a valid email address.',
+    settingCountryLabel: 'Country',
+    settingDistrictLabel: 'District',
+    districtUnsetText: '— Select district (defaults to Group A) —',
+    districtGroupALabel: 'Group A',
+    districtGroupBLabel: 'Group B',
+    districtGroupCLabel: 'Group C',
+    settingLangLabel: 'Language',
+    modalCancelBtn:   'Cancel',
+    modalSaveBtn:     'Save',
+    settingsBtnLabel: 'Settings',
+    newChatBtn:       '+ New chat',
+    chatsListNoEmail: 'Set your email in Settings to see past chats.',
+    chatsListEmpty:   'No past chats yet — start one with the message bar.',
+    chatRowUntitled:  '(Untitled chat)',
+    countryWarn:      'MalariaChat content is Rwanda-specific (RBC 2024 protocol, MFT districts). Coverage for {country} is on the roadmap — chat is disabled until you switch back to Rwanda.',
+    inputDisabledPh:  'Switch country to Rwanda in Settings (gear icon, bottom-left) to chat.',
+  },
+  rw: {
+    headerSub: 'Umufasha w\'Inshuti z\'Ubuzima — RBC 2024 — amakuru y\'ikitegererezo',
+    headerSubTeaching: '{country} — uburyo bw\'inyigisho — WHO 2024 — amakuru y\'ikitegererezo',
+    sendBtn:   'Ohereza',
+    placeholder: 'Baza MalariaChat…  (urugero: "Kayonza, umwana ibiro 22kg RDT pozitifu, nta bimenyetso bibi")',
+    placeholderTeaching: 'Baza MalariaChat…  (urugero: "umwana ibiro 22kg RDT pozitifu, nta bimenyetso bibi")',
+    reviewBanner: '<strong>[GUSUZUMA_PROTOKOLE_BIRAKENEWE]</strong> Buri gisubizo cya MalariaChat gisabwa kuzuzwa n\'umuyobozi w\'Inshuti cyangwa umunyamwuga w\'ubuvuzi mbere y\'ibikorwa. Doze, ibimenyetso bibi, n\'inda bisubizwa n\'imashini ya deterministic ya RBC 2024; LLM ihindura gusa mu nteruro yo kuvugana.',
+    reviewBannerTeaching: '<strong>[Uburyo bw\'inyigisho]</strong> MalariaChat iri mu buryo bw\'inyigisho ku {country}. Ibibazo by\'imiti bishingiye ku mabwiriza ya WHO 2024 rusange; ku gukoresha mu buvuzi mu {country}, reba amabwiriza y\'igihugu yo kurwanya malariya. Amakuru y\'ikitegererezo gusa.',
+    welcomeTitle: 'Baza ikibazo cyose ku malariya',
+    welcomeBody: '<p>Kugenzura ibikomeye, ibibazo by\'imiti, trimestre y\'inda, umuti wa mbere w\'akarere, IPTp, inkingo — cyangwa ikindi kibazo cyose. Ibisubizo by\'imiti biva mu mashini ya deterministic; modeli ihindura gusa mu nteruro yo kuvugana.</p>',
+    welcomeBodyTeaching: '<p>Kugenzura ibikomeye, ibibazo by\'imiti, trimestre y\'inda, IPTp, inkingo — cyangwa ikindi kibazo cyose kuri malariya. Ibisubizo by\'imiti biva mu mabwiriza rusange ya WHO 2024; modeli ihindura gusa mu nteruro yo kuvugana.</p>',
+    welcomeExamples: '<div>Gerageza:</div><div><code>Kayonza umwana ibiro 22kg RDT pozitifu</code></div><div><code>utwite ibyumweru 8 RDT pozitifu</code></div><div><code>IPTp ni iki?</code></div><div><code>arahungabana ntashobora kunywa</code></div>',
+    welcomeExamplesTeaching: '<div>Gerageza:</div><div><code>umwana ibiro 22kg RDT pozitifu</code></div><div><code>utwite ibyumweru 8 RDT pozitifu</code></div><div><code>IPTp ni iki?</code></div><div><code>arahungabana ntashobora kunywa</code></div>',
+    offlineBadge: '🔌 LLM ntiboneka — deterministic gusa',
+    typing: 'MalariaChat iratekereza…',
+    networkError: '⚠️  ikibazo cy\'urusobe — ntibyashobotse kugera kuri /v1/chat. Ongera ugerageze.',
+    structuredDetailsLabel: 'Amakuru y\'urutonde (yatanzwe na {endpoint})',
+    intentBadge: { dose: 'doze', danger: 'bimenyetso bibi', pregnancy: 'inda', 'first-line': 'umuti wa mbere', iptp: 'IPTp', vaccines: 'inkingo', open: 'ikibazo', 'country-not-supported': 'igihugu ntikiremerwa' },
+    settingsTitle:    'Igenamiterere',
+    settingNameLabel: 'Izina ryawe',
+    settingNamePh:    'urugero: Jeanne',
+    settingEmailLabel: 'Imeyili',
+    settingEmailPh:   'urugero: jeanne@health.rw',
+    settingPhoneLabel: 'Telefoni (si itegeko)',
+    settingPhonePh:   'urugero: +250 7XX XXX XXX',
+    emailRequiredError: 'Imeyili irakenewe.',
+    emailInvalidError:  'Andika aderesi y\'imeyili nziza.',
+    settingCountryLabel: 'Igihugu',
+    settingDistrictLabel: 'Akarere',
+    districtUnsetText: '— Hitamo akarere (ibisanzwe ni Itsinda A) —',
+    districtGroupALabel: 'Itsinda A',
+    districtGroupBLabel: 'Itsinda B',
+    districtGroupCLabel: 'Itsinda C',
+    settingLangLabel: 'Ururimi',
+    modalCancelBtn:   'Reka',
+    modalSaveBtn:     'Bika',
+    settingsBtnLabel: 'Igenamiterere',
+    newChatBtn:       '+ Ikiganiro gishya',
+    chatsListNoEmail: 'Shyira imeyili yawe muri Igenamiterere kugira ngo ubone ibiganiro byashize.',
+    chatsListEmpty:   'Nta biganiro byashize uracyari — tangira kimwe ukoresheje uburyo bwo kwandika hasi.',
+    chatRowUntitled:  '(Ikiganiro nta zina)',
+    countryWarn:      'MalariaChat ifite uburyo bwo gukorera u Rwanda, Tanzaniya na Kenya. Ubufasha kuri {country} buracyaza — kuvugana bihagarariwe kugeza uhinduye igihugu.',
+    inputDisabledPh:  'Hindura igihugu mu rutonde rw\'igenamiterere (akamenyetso ko hasi ibumoso).',
+  },
+  sw: {
+    // Phase A teaching-mode Swahili — UNREVIEWED draft. Native review
+    // is Phase B work.
+    headerSub: 'Msaidizi wa CHW Rwanda — protokoli ya RBC 2024 — data ya majaribio',
+    headerSubTeaching: '{country} — hali ya kufundisha — msingi wa WHO 2024 — data ya majaribio',
+    sendBtn:   'Tuma',
+    placeholder: 'Uliza MalariaChat…  (mfano: "Mtoto wa kilo 12, RDT chanya, dalili yoyote ya hatari?")',
+    placeholderTeaching: 'Uliza MalariaChat…  (mfano: "Mtoto wa kilo 12, RDT chanya, dalili yoyote ya hatari?")',
+    reviewBanner: '<strong>[ITAHADHARISHO_LA_PROTOKOLI]</strong> Kila jibu la MalariaChat linahitaji ukaguzi wa msimamizi wa CHW au mfanyakazi wa afya kabla ya hatua. Majibu ya dozi, ukali, na ujauzito yanatoka kwa injini ya hakika ya RBC 2024; LLM inaandika upya tu.',
+    reviewBannerTeaching: '<strong>[Hali ya kufundisha]</strong> MalariaChat iko katika hali ya kufundisha kwa {country}. Maudhui ya kliniki yanayoonyeshwa ni msingi wa miongozo ya WHO 2024; kwa matumizi ya kliniki nchini {country}, rejelea miongozo ya mpango wa kitaifa wa kupambana na malaria. Data ya majaribio tu.',
+    welcomeTitle: 'Uliza chochote kuhusu malaria',
+    welcomeBody: '<p>Triaji, maswali ya dozi, kipindi cha ujauzito, dawa ya kwanza ya wilaya, IPTp, chanjo — au swali lingine lolote la wazi. Majibu ya kliniki yanahesabiwa kwa njia ya uhakika; modeli inaandika upya tu kwa mazungumzo.</p>',
+    welcomeBodyTeaching: '<p>Triaji, maswali ya dozi, kipindi cha ujauzito, IPTp, chanjo — au swali lingine lolote kuhusu malaria. Majibu ya kliniki yanahesabiwa kwa njia ya uhakika kutoka kwa msingi wa WHO 2024; modeli inaandika upya tu kwa mazungumzo.</p>',
+    welcomeExamples: '<div>Jaribu:</div><div><code>mtoto kilo 22 RDT chanya</code></div><div><code>mjamzito wiki 8 RDT chanya</code></div><div><code>IPTp ni nini?</code></div><div><code>degedege na hawezi kunywa</code></div>',
+    welcomeExamplesTeaching: '<div>Jaribu:</div><div><code>mtoto kilo 22 RDT chanya</code></div><div><code>mjamzito wiki 8 RDT chanya</code></div><div><code>IPTp ni nini?</code></div><div><code>degedege na hawezi kunywa</code></div>',
+    offlineBadge: '🔌 LLM haiwezi kufikiwa — uhakika tu',
+    typing: 'MalariaChat inafikiri…',
+    networkError: '⚠️  hitilafu ya mtandao — haikuweza kufikia /v1/chat. Tafadhali jaribu tena.',
+    structuredDetailsLabel: 'Jibu lililopangwa (kutoka {endpoint})',
+    intentBadge: { dose: 'dozi', danger: 'dalili za hatari', pregnancy: 'ujauzito', 'first-line': 'dawa ya kwanza', iptp: 'IPTp', vaccines: 'chanjo', open: 'swali', 'country-not-supported': 'nchi haisaidiwi' },
+    settingsTitle:    'Mipangilio',
+    settingNameLabel: 'Jina lako',
+    settingNamePh:    'mfano: Asha',
+    settingEmailLabel: 'Barua pepe',
+    settingEmailPh:   'mfano: asha@afya.tz',
+    settingPhoneLabel: 'Simu (si lazima)',
+    settingPhonePh:   'mfano: +255 7XX XXX XXX',
+    emailRequiredError: 'Barua pepe inahitajika.',
+    emailInvalidError:  'Tafadhali andika anwani sahihi ya barua pepe.',
+    settingCountryLabel: 'Nchi',
+    settingDistrictLabel: 'Wilaya',
+    districtUnsetText: '— Chagua wilaya (chaguo-msingi ni Kundi A) —',
+    districtGroupALabel: 'Kundi A',
+    districtGroupBLabel: 'Kundi B',
+    districtGroupCLabel: 'Kundi C',
+    settingLangLabel: 'Lugha',
+    modalCancelBtn:   'Ghairi',
+    modalSaveBtn:     'Hifadhi',
+    settingsBtnLabel: 'Mipangilio',
+    newChatBtn:       '+ Mazungumzo mapya',
+    chatsListNoEmail: 'Weka barua pepe yako kwenye Mipangilio ili kuona mazungumzo yaliyopita.',
+    chatsListEmpty:   'Hakuna mazungumzo yaliyopita bado — anza moja kwa kutumia upau wa ujumbe hapa chini.',
+    chatRowUntitled:  '(Mazungumzo bila jina)',
+    countryWarn:      'MalariaChat kwa sasa inasaidia Rwanda, Tanzania, na Kenya (hali ya kufundisha). Msaada wa {country} unakuja — mazungumzo yamezuiliwa hadi ubadilishe nchi.',
+    inputDisabledPh:  'Badilisha nchi kwenye Mipangilio (alama ya gia, kushoto chini) ili kuongea.',
+  },
+  fr: {
+    // Phase A teaching-mode French — UNREVIEWED draft. Burundi (BI)
+    // and DR Congo (CD) are French-language teaching-mode countries.
+    // Native review is Phase B work.
+    headerSub: 'Assistant CHW Rwanda — protocole RBC 2024 — données synthétiques',
+    headerSubTeaching: '{country} — mode enseignement — référence OMS 2024 — données synthétiques',
+    sendBtn:   'Envoyer',
+    placeholder: 'Demandez à MalariaChat…  (ex : "Enfant 22 kg RDT positif, aucun signe de danger")',
+    placeholderTeaching: 'Demandez à MalariaChat…  (ex : "Enfant 22 kg RDT positif, aucun signe de danger")',
+    reviewBanner: '<strong>[PROTOCOL_REVIEW_REQUIRED]</strong> Chaque réponse de MalariaChat nécessite la révision par un superviseur CHW ou un personnel clinique avant action. Les réponses sur les doses, la gravité et la grossesse proviennent du moteur déterministe RBC 2024 ; le LLM ne fait que reformuler.',
+    reviewBannerTeaching: '<strong>[Mode enseignement]</strong> MalariaChat est en mode enseignement pour {country}. Le contenu clinique affiché est basé sur les recommandations de l\'OMS 2024 ; pour un usage clinique en {country}, consultez les directives du programme national de lutte contre le paludisme. Données synthétiques / démo uniquement.',
+    welcomeTitle: 'Posez toute question liée au paludisme',
+    welcomeBody: '<p>Triage, questions de dose, trimestre de grossesse, médicament de première ligne par district, TPIg, vaccins — ou toute question ouverte. Les réponses cliniques sont calculées de manière déterministe ; le modèle ne fait que les reformuler pour le chat.</p>',
+    welcomeBodyTeaching: '<p>Triage, questions de dose, trimestre de grossesse, TPIg, vaccins — ou toute question ouverte sur le paludisme. Les réponses cliniques sont calculées de manière déterministe à partir de la référence OMS 2024 ; le modèle ne fait que les reformuler pour le chat.</p>',
+    welcomeExamples: '<div>Essayez :</div><div><code>enfant 22 kg RDT positif</code></div><div><code>femme enceinte 8 semaines RDT positif</code></div><div><code>Qu\'est-ce que le TPIg ?</code></div><div><code>convulsions et ne peut pas boire</code></div>',
+    welcomeExamplesTeaching: '<div>Essayez :</div><div><code>enfant 22 kg RDT positif</code></div><div><code>femme enceinte 8 semaines RDT positif</code></div><div><code>Qu\'est-ce que le TPIg ?</code></div><div><code>convulsions et ne peut pas boire</code></div>',
+    offlineBadge: '🔌 LLM hors ligne — déterministe uniquement',
+    typing: 'MalariaChat réfléchit…',
+    networkError: '⚠️  erreur réseau — impossible de joindre /v1/chat. Veuillez réessayer.',
+    structuredDetailsLabel: 'Réponse structurée (de {endpoint})',
+    intentBadge: { dose: 'dose', danger: 'signes de danger', pregnancy: 'grossesse', 'first-line': 'première ligne', iptp: 'TPIg', vaccines: 'vaccins', open: 'question', 'country-not-supported': 'pays non pris en charge' },
+    settingsTitle:    'Paramètres',
+    settingNameLabel: 'Votre nom',
+    settingNamePh:    'ex : Marie',
+    settingEmailLabel: 'E-mail',
+    settingEmailPh:   'ex : marie@sante.bi',
+    settingPhoneLabel: 'Téléphone (facultatif)',
+    settingPhonePh:   'ex : +257 7X XX XX XX',
+    emailRequiredError: 'L\'e-mail est requis.',
+    emailInvalidError:  'Veuillez saisir une adresse e-mail valide.',
+    settingCountryLabel: 'Pays',
+    settingDistrictLabel: 'District',
+    districtUnsetText: '— Choisir le district (par défaut : Groupe A) —',
+    districtGroupALabel: 'Groupe A',
+    districtGroupBLabel: 'Groupe B',
+    districtGroupCLabel: 'Groupe C',
+    settingLangLabel: 'Langue',
+    modalCancelBtn:   'Annuler',
+    modalSaveBtn:     'Enregistrer',
+    settingsBtnLabel: 'Paramètres',
+    newChatBtn:       '+ Nouvelle conversation',
+    chatsListNoEmail: 'Saisissez votre e-mail dans Paramètres pour voir les conversations précédentes.',
+    chatsListEmpty:   'Aucune conversation précédente — commencez-en une avec la barre de message ci-dessous.',
+    chatRowUntitled:  '(Conversation sans titre)',
+    countryWarn:      'MalariaChat ne prend pas en charge {country}. Changez de pays dans Paramètres.',
+    inputDisabledPh:  'Changez de pays dans Paramètres (icône d\'engrenage, en bas à gauche) pour discuter.',
+  },
+};
+
+const COUNTRY_DISPLAY = {
+  en: { RW: 'Rwanda', BI: 'Burundi', CD: 'DRC', KE: 'Kenya', TZ: 'Tanzania', UG: 'Uganda', ZM: 'Zambia' },
+  rw: { RW: 'u Rwanda', BI: 'Uburundi', CD: 'Repubulika Iharanira Demokarasi ya Kongo', KE: 'Kenya', TZ: 'Tanzaniya', UG: 'Uganda', ZM: 'Zambiya' },
+  sw: { RW: 'Rwanda', BI: 'Burundi', CD: 'Jamhuri ya Kidemokrasia ya Kongo', KE: 'Kenya', TZ: 'Tanzania', UG: 'Uganda', ZM: 'Zambia' },
+  fr: { RW: 'Rwanda', BI: 'Burundi', CD: 'République Démocratique du Congo', KE: 'Kenya', TZ: 'Tanzanie', UG: 'Ouganda', ZM: 'Zambie' },
+};
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function $(id) { return document.getElementById(id); }
+function L() { return LABELS[activeLang] || LABELS.en; }
+// Phase A: all seven countries are chat-enabled. RW runs the full
+// RBC 2024 production protocol; the other six run the WHO 2024
+// teaching baseline. Within teaching mode, language coverage
+// varies (see isEnglishOnlyCountry and isFrenchOnlyCountry).
+function isSupportedCountry(c) {
+  return c === 'RW' || c === 'TZ' || c === 'KE' || c === 'UG' || c === 'ZM'
+      || c === 'BI' || c === 'CD';
+}
+// Uganda and Zambia ship in English only. No Swahili / Kinyarwanda /
+// French labels for those audiences in Phase A.
+function isEnglishOnlyCountry(c) {
+  return c === 'UG' || c === 'ZM';
+}
+// Burundi and DRC ship in French only. No English / Swahili /
+// Kinyarwanda labels for those audiences.
+function isFrenchOnlyCountry(c) {
+  return c === 'BI' || c === 'CD';
+}
+function escapeHtml(s) {
+  return (s ?? '').toString()
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ── Rendering ──────────────────────────────────────────────────────────────
+// renderStaticLabels — non-modal text. The Settings modal has its own
+// label renderer (renderModalLabels) keyed on modalPending.lang while
+// the modal is open, so a language switch inside the modal previews
+// before commit.
+function renderStaticLabels() {
+  const t = L();
+  // Header subtitle and review banner are country-aware: Rwanda uses
+  // the production "CHW assistant / PROTOCOL_REVIEW_REQUIRED" framing;
+  // Tanzania/Kenya use the teaching-mode / WHO 2024 framing with the
+  // country name interpolated.
+  const isRwandaMode = settings.country === 'RW';
+  const cName = (COUNTRY_DISPLAY[activeLang] && COUNTRY_DISPLAY[activeLang][settings.country]) || settings.country;
+  $('headerSub').textContent          = isRwandaMode
+    ? t.headerSub
+    : (t.headerSubTeaching || t.headerSub).replace(/\{country\}/g, cName);
+  $('sendBtn').textContent            = t.sendBtn;
+  $('reviewBanner').innerHTML         = isRwandaMode
+    ? t.reviewBanner
+    : (t.reviewBannerTeaching || t.reviewBanner).replace(/\{country\}/g, cName);
+  $('welcomeTitle').textContent       = t.welcomeTitle;
+  $('welcomeBody').innerHTML          = isRwandaMode
+    ? t.welcomeBody
+    : (t.welcomeBodyTeaching || t.welcomeBody);
+  $('welcomeExamples').innerHTML      = isRwandaMode
+    ? t.welcomeExamples
+    : (t.welcomeExamplesTeaching || t.welcomeExamples);
+  $('newChatBtn').textContent         = t.newChatBtn;
+  $('settingsBtnLabel').textContent   = t.settingsBtnLabel;
+  // The chats list area renders its own contents (placeholder text OR
+  // row list) via fetchChatsList — re-fetch here so the language
+  // change is reflected in the placeholder text.
+  fetchChatsList();
+  refreshCountryUx();
+}
+
+// refreshCountryUx — toggles chat input enable based on the committed
+// (settings.country) value. Does NOT touch the country-warn DIV — that
+// lives inside the Settings modal and is managed by refreshModalCountryWarn.
+function refreshCountryUx() {
+  const t = L();
+  const supported = isSupportedCountry(settings.country);
+  const inputEl   = $('messageInput');
+  const btnEl     = $('sendBtn');
+  if (supported) {
+    inputEl.disabled    = false;
+    // Drop the "Kayonza, …" example for non-Rwanda teaching countries;
+    // Kayonza is meaningless when the user is in TZ/KE/UG/ZM mode.
+    inputEl.placeholder = (settings.country === 'RW')
+      ? t.placeholder
+      : (t.placeholderTeaching || t.placeholder);
+    btnEl.disabled      = sending;
+  } else {
+    inputEl.disabled    = true;
+    inputEl.placeholder = t.inputDisabledPh;
+    btnEl.disabled      = true;
+  }
+}
+
+// ── Chats sidebar ───────────────────────────────────────────────────────────
+//
+// fetchChatsList: hits GET /v1/chats?email=... and renders the result
+// into #chatsListArea. Bails to the no-email placeholder when settings
+// has no email yet; bails to the empty placeholder when the user has
+// never chatted before. Cached as chatsList so highlightActiveChat /
+// openChat don't re-fetch unnecessarily.
+async function fetchChatsList() {
+  const t    = L();
+  const area = $('chatsListArea');
+  if (!settings.email) {
+    chatsList = [];
+    area.innerHTML = '';
+    area.appendChild(makePlaceholder(t.chatsListNoEmail));
+    return;
+  }
+  try {
+    const resp = await fetch('/v1/chats'
+      + '?email=' + encodeURIComponent(settings.email)
+      + '&country=' + encodeURIComponent(settings.country || 'RW'));
+    if (!resp.ok) {
+      chatsList = [];
+      area.innerHTML = '';
+      area.appendChild(makePlaceholder(t.networkError + ' (HTTP ' + resp.status + ')'));
+      return;
+    }
+    const data = await resp.json();
+    chatsList = data.chats || [];
+    renderChatsList();
+  } catch (e) {
+    chatsList = [];
+    area.innerHTML = '';
+    area.appendChild(makePlaceholder(t.networkError));
+  }
+}
+
+function makePlaceholder(text) {
+  const div = document.createElement('div');
+  div.className = 'chats-list-placeholder';
+  div.id = 'chatsListPlaceholder';
+  div.textContent = text;
+  return div;
+}
+
+function renderChatsList() {
+  const t    = L();
+  const area = $('chatsListArea');
+  area.innerHTML = '';
+  if (chatsList.length === 0) {
+    area.appendChild(makePlaceholder(t.chatsListEmpty));
+    return;
+  }
+  chatsList.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'chat-row';
+    if (c.conversationId === conversationId) row.classList.add('active');
+    row.dataset.conversationId = c.conversationId;
+
+    const title = document.createElement('div');
+    title.className = 'chat-row-title';
+    title.textContent = (c.title && c.title.length > 0) ? c.title : t.chatRowUntitled;
+    row.appendChild(title);
+
+    const meta = document.createElement('div');
+    meta.className = 'chat-row-meta';
+    meta.textContent = formatChatTimestamp(c.lastActivityAt) + ' · ' + c.messageCount;
+    row.appendChild(meta);
+
+    row.addEventListener('click', () => openChat(c.conversationId));
+    area.appendChild(row);
+  });
+}
+
+function highlightActiveChat() {
+  document.querySelectorAll('.chat-row').forEach(r => {
+    r.classList.toggle('active', r.dataset.conversationId === conversationId);
+  });
+}
+
+// formatChatTimestamp: Postgres emits "YYYY-MM-DDTHH:MM:SS" (no zone).
+// new Date() parses it as local time. We render same-day chats as
+// HH:MM and older chats as a short date.
+function formatChatTimestamp(s) {
+  if (!s) return '';
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return s;
+  const now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  if (sameDay) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString();
+}
+
+// openChat: load /v1/chat-history for a conversation id and replay
+// every message back into the thread. Called from the chat-row click
+// handler and from the page-load resume path.
+async function openChat(convId) {
+  if (!convId) return;
+  // Note: no early-return based on `convId === conversationId`. The
+  // welcome empty-state IS a child of #thread on page load, so the
+  // previous "already open" check (`thread.children.length > 0`)
+  // matched even when the actual chat hadn't been replayed yet.
+  // Refetching costs one cheap GET per click; the simplicity is
+  // worth more than the avoided round-trip.
+  const t = L();
+  try {
+    const resp = await fetch('/v1/chat-history?conversationId=' + encodeURIComponent(convId));
+    if (!resp.ok) {
+      appendErrorBubble(t.networkError + ' (HTTP ' + resp.status + ')');
+      return;
+    }
+    const data = await resp.json();
+    replayMessages(data.messages || []);
+    setActiveConversation(convId);
+  } catch (e) {
+    appendErrorBubble(t.networkError);
+  }
+}
+
+// replayMessages: clear the thread and render each persisted message
+// using the same bubble renderers the live chat path uses, so a
+// reloaded conversation looks identical to the live one.
+function replayMessages(messages) {
+  const thread = $('thread');
+  thread.innerHTML = '';
+  if (messages.length === 0) {
+    // No turns yet — restore welcome state.
+    clearThreadAndShowWelcome();
+    return;
+  }
+  messages.forEach(m => {
+    if (m.role === 'user') {
+      appendUserBubble(m.text);
+    } else if (m.role === 'assistant') {
+      appendAssistantBubble({
+        assistantText:      m.text,
+        intent:             m.intent || 'open',
+        structured:         m.structured || null,
+        structuredEndpoint: m.structuredEndpoint || null,
+        llmOnline:          true,
+      });
+    }
+  });
+}
+
+function clearThreadAndShowWelcome() {
+  const thread = $('thread');
+  thread.innerHTML = '';
+  const empty = document.createElement('div');
+  empty.className = 'empty-state';
+  empty.id = 'emptyState';
+  const t = L();
+  // Country-aware welcome body + examples (matches renderStaticLabels):
+  // Rwanda keeps the production text (mentions district first-line +
+  // Kayonza); TZ/KE use the teaching variants (drop district + Kayonza).
+  const isRwandaMode = settings.country === 'RW';
+  const body     = isRwandaMode ? t.welcomeBody     : (t.welcomeBodyTeaching     || t.welcomeBody);
+  const examples = isRwandaMode ? t.welcomeExamples : (t.welcomeExamplesTeaching || t.welcomeExamples);
+  empty.innerHTML = `<h2 id="welcomeTitle">${escapeHtml(t.welcomeTitle)}</h2>`
+                  + `<div id="welcomeBody">${body}</div>`
+                  + `<div class="examples" id="welcomeExamples">${examples}</div>`;
+  thread.appendChild(empty);
+}
+
+// ── Settings modal ──────────────────────────────────────────────────────────
+function isValidEmail(s) {
+  if (!s || s.length === 0) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
+function openSettingsModal() {
+  // Snapshot current settings into modalPending so edits can be discarded.
+  modalPending = { ...settings };
+  hydrateModalInputs(modalPending);
+  renderModalLabels(modalPending.lang);
+  refreshModalCountryWarn();
+  clearEmailError();
+  $('settingsModalBackdrop').style.display = '';
+  // Focus first field for keyboard users.
+  setTimeout(() => $('settingName').focus(), 0);
+}
+
+function closeSettingsModal() {
+  modalPending = null;
+  $('settingsModalBackdrop').style.display = 'none';
+}
+
+function hydrateModalInputs(p) {
+  $('settingName').value     = p.userName;
+  $('settingEmail').value    = p.email;
+  $('settingPhone').value    = p.phone;
+  $('settingCountry').value  = p.country;
+  $('settingDistrict').value = p.district;
+  document.querySelectorAll('#settingsModal .lang-pill').forEach(el => {
+    el.classList.toggle('active', el.dataset.lang === p.lang);
+  });
+}
+
+// Country dropdown option labels are LANGUAGE-DEPENDENT in two ways:
+//   - the country name itself (Tanzania / Tanzanie / Tanzaniya)
+//   - the trailing helper text (teaching mode + language restriction)
+// We rebuild the option text on every modal-label render so a lang
+// switch inside the modal updates the dropdown text too.
+const COUNTRY_DROPDOWN_NAME = {
+  en: { RW:'Rwanda', BI:'Burundi', CD:'DRC',  KE:'Kenya', TZ:'Tanzania', UG:'Uganda',  ZM:'Zambia' },
+  fr: { RW:'Rwanda', BI:'Burundi', CD:'RDC',  KE:'Kenya', TZ:'Tanzanie', UG:'Ouganda', ZM:'Zambie' },
+  rw: { RW:'Rwanda', BI:'Uburundi',CD:'RDC',  KE:'Kenya', TZ:'Tanzaniya',UG:'Uganda',  ZM:'Zambiya'},
+  sw: { RW:'Rwanda', BI:'Burundi', CD:'DRC',  KE:'Kenya', TZ:'Tanzania', UG:'Uganda',  ZM:'Zambia' },
+};
+const COUNTRY_DROPDOWN_SUFFIX = {
+  en: { teaching: ' (teaching)',
+        englishOnly: ' (teaching, English only)',
+        frenchOnly:  ' (teaching, French only)' },
+  fr: { teaching: ' (mode enseignement)',
+        englishOnly: ' (mode enseignement, langue : Anglais)',
+        frenchOnly:  ' (mode enseignement, langue : Français)' },
+  rw: { teaching:    " (uburyo bw'inyigisho)",
+        englishOnly: " (uburyo bw'inyigisho, ururimi: Icyongereza)",
+        frenchOnly:  " (uburyo bw'inyigisho, ururimi: Igifaransa)" },
+  sw: { teaching:    ' (hali ya kufundisha)',
+        englishOnly: ' (hali ya kufundisha, lugha: Kiingereza)',
+        frenchOnly:  ' (hali ya kufundisha, lugha: Kifaransa)' },
+};
+function refreshCountryDropdownLabels(lang) {
+  const names    = COUNTRY_DROPDOWN_NAME[lang]   || COUNTRY_DROPDOWN_NAME.en;
+  const suffixes = COUNTRY_DROPDOWN_SUFFIX[lang] || COUNTRY_DROPDOWN_SUFFIX.en;
+  const sel = $('settingCountry');
+  for (const opt of sel.options) {
+    const code = opt.value;
+    if (!code) continue;
+    const name = names[code] || code;
+    let suffix;
+    if (code === 'RW')                              suffix = '';
+    else if (code === 'UG' || code === 'ZM')        suffix = suffixes.englishOnly;
+    else if (code === 'BI' || code === 'CD')        suffix = suffixes.frenchOnly;
+    else                                            suffix = suffixes.teaching;
+    opt.textContent = name + suffix;
+  }
+}
+
+function renderModalLabels(lang) {
+  const t = LABELS[lang] || LABELS.en;
+  $('settingsTitle').textContent       = t.settingsTitle;
+  $('settingNameLabel').textContent    = t.settingNameLabel;
+  $('settingName').placeholder         = t.settingNamePh;
+  $('settingEmailLabel').textContent   = t.settingEmailLabel;
+  $('settingEmail').placeholder        = t.settingEmailPh;
+  $('settingPhoneLabel').textContent   = t.settingPhoneLabel;
+  $('settingPhone').placeholder        = t.settingPhonePh;
+  $('settingCountryLabel').textContent = t.settingCountryLabel;
+  $('settingDistrictLabel').textContent= t.settingDistrictLabel;
+  $('districtUnsetOption').textContent = t.districtUnsetText;
+  $('districtGroupA').setAttribute('label', t.districtGroupALabel);
+  $('districtGroupB').setAttribute('label', t.districtGroupBLabel);
+  $('districtGroupC').setAttribute('label', t.districtGroupCLabel);
+  $('settingLangLabel').textContent    = t.settingLangLabel;
+  $('modalCancelBtn').textContent      = t.modalCancelBtn;
+  $('modalSaveBtn').textContent        = t.modalSaveBtn;
+  refreshCountryDropdownLabels(lang);
+}
+
+function refreshModalCountryWarn() {
+  if (!modalPending) return;
+  const t = LABELS[modalPending.lang] || LABELS.en;
+  const warnEl = $('countryWarn');
+  if (isSupportedCountry(modalPending.country)) {
+    warnEl.style.display = 'none';
+    warnEl.textContent   = '';
+  } else {
+    const cName = (COUNTRY_DISPLAY[modalPending.lang] && COUNTRY_DISPLAY[modalPending.lang][modalPending.country]) || modalPending.country;
+    warnEl.textContent   = t.countryWarn.replace('{country}', cName);
+    warnEl.style.display = '';
+  }
+  refreshDistrictFieldVisibility();
+  refreshLanguagePillAvailability();
+}
+
+// District is the 30 Rwandan districts; hide the field entirely for
+// any other country. Also clears the pending district so Save doesn't
+// persist a stale Rwandan district value after the user switched.
+function refreshDistrictFieldVisibility() {
+  if (!modalPending) return;
+  const isRwanda = modalPending.country === 'RW';
+  $('settingDistrictField').style.display = isRwanda ? '' : 'none';
+  if (!isRwanda) {
+    modalPending.district = '';
+    $('settingDistrict').value = '';
+  }
+}
+
+// Country↔language constraint enforcement in the Settings modal.
+// Phase A rules:
+//   - UG/ZM: English only — disable RW/SW/FR pills, force lang='en'.
+//   - BI/CD: French only — disable EN/RW/SW pills, force lang='fr'.
+//   - RW/TZ/KE: EN/RW/SW available; FR disabled (no French canonical
+//     content for those audiences).
+// Called from refreshModalCountryWarn so it fires on modal open and
+// on every country-dropdown change.
+function refreshLanguagePillAvailability() {
+  if (!modalPending) return;
+  const enOnly = isEnglishOnlyCountry(modalPending.country);
+  const frOnly = isFrenchOnlyCountry(modalPending.country);
+  if (enOnly && modalPending.lang !== 'en')      modalPending.lang = 'en';
+  else if (frOnly && modalPending.lang !== 'fr') modalPending.lang = 'fr';
+  document.querySelectorAll('#settingsModal .lang-pill').forEach(p => {
+    const dl = p.dataset.lang;
+    let allowed;
+    if (enOnly)      allowed = (dl === 'en');
+    else if (frOnly) allowed = (dl === 'fr');
+    else             allowed = (dl !== 'fr');  // FR only for BI/CD
+    if (!allowed) {
+      p.classList.add('disabled');
+      p.classList.remove('active');
+    } else {
+      p.classList.remove('disabled');
+      p.classList.toggle('active', dl === modalPending.lang);
+    }
+  });
+  if (enOnly || frOnly) renderModalLabels(modalPending.lang);
+}
+
+function clearEmailError() {
+  $('settingEmailError').textContent = '';
+  $('settingEmail').classList.remove('invalid');
+}
+
+function showEmailError(msg) {
+  $('settingEmailError').textContent = msg;
+  $('settingEmail').classList.add('invalid');
+}
+
+function saveSettingsModal() {
+  if (!modalPending) return;
+  const trimmedEmail = (modalPending.email || '').trim();
+  const t = LABELS[modalPending.lang] || LABELS.en;
+  if (trimmedEmail.length === 0) {
+    showEmailError(t.emailRequiredError);
+    $('settingEmail').focus();
+    return;
+  }
+  if (!isValidEmail(trimmedEmail)) {
+    showEmailError(t.emailInvalidError);
+    $('settingEmail').focus();
+    return;
+  }
+  // Commit.
+  const prevEmail   = settings.email;
+  const prevCountry = settings.country;
+  settings = { ...modalPending, email: trimmedEmail };
+  activeLang = settings.lang;
+  saveSettings();
+  closeSettingsModal();
+  renderStaticLabels();
+  // If email OR country changed, the active conversation may no
+  // longer belong to the visible sidebar (chats are filtered by
+  // both email and country). Drop back to the welcome state so the
+  // user isn't stuck on a chat that's no longer in their list.
+  // renderStaticLabels already triggers a fetchChatsList refresh.
+  if ((trimmedEmail !== prevEmail || settings.country !== prevCountry)
+      && conversationId) {
+    setActiveConversation(null);
+    clearThreadAndShowWelcome();
+  }
+}
+
+// ── New chat ────────────────────────────────────────────────────────────────
+// Clear the active conversation id so the next message opens a fresh
+// row. Clear the thread DOM and restore the welcome empty-state.
+function startNewChat() {
+  setActiveConversation(null);
+  clearThreadAndShowWelcome();
+  $('messageInput').focus();
+}
+
+function clearEmptyState() {
+  const el = $('emptyState');
+  if (el) el.remove();
+}
+
+function scrollToBottom() {
+  const m = $('thread');
+  m.scrollTop = m.scrollHeight;
+}
+
+function appendUserBubble(text) {
+  clearEmptyState();
+  const div = document.createElement('div');
+  div.className = 'bubble user';
+  div.textContent = text;
+  $('thread').appendChild(div);
+  scrollToBottom();
+}
+
+function appendAssistantBubble(payload) {
+  clearEmptyState();
+  const t = L();
+  const div = document.createElement('div');
+  div.className = 'bubble assistant';
+  // Primary text
+  const txt = document.createElement('div');
+  txt.textContent = payload.assistantText || '';
+  div.appendChild(txt);
+
+  // Meta chips: intent + offline + default-A note
+  const metaChips = [];
+  if (payload.intent && t.intentBadge[payload.intent]) {
+    let chipCls = 'meta-chip';
+    if (payload.intent === 'danger') chipCls += ' danger';
+    metaChips.push({ cls: chipCls, text: t.intentBadge[payload.intent] });
+  }
+  if (payload.llmOnline === false) {
+    metaChips.push({ cls: 'meta-chip warn', text: t.offlineBadge });
+  }
+  // Group-A default chip is Rwanda MFT terminology — suppress for
+  // any other country (TZ/KE/UG/ZM use the WHO 2024 baseline which
+  // has no MFT-style group rotation).
+  if (settings.country === 'RW'
+      && payload.structured
+      && payload.structured.mftContextSource === 'default-group-a') {
+    metaChips.push({ cls: 'meta-chip warn', text: activeLang === 'rw' ? 'Itsinda A (ibisanzwe)' : activeLang === 'sw' ? 'Kundi A (chaguo-msingi)' : 'Group A (default)' });
+  }
+  if (metaChips.length > 0) {
+    const row = document.createElement('div');
+    row.className = 'meta-row';
+    metaChips.forEach(c => {
+      const span = document.createElement('span');
+      span.className = c.cls;
+      span.textContent = c.text;
+      row.appendChild(span);
+    });
+    div.appendChild(row);
+  }
+
+  // Structured details (collapsible)
+  if (payload.structured) {
+    const det = document.createElement('details');
+    det.className = 'structured-details';
+    const sum = document.createElement('summary');
+    sum.textContent = t.structuredDetailsLabel.replace('{endpoint}', payload.structuredEndpoint || 'engine');
+    det.appendChild(sum);
+    const pre = document.createElement('pre');
+    pre.textContent = JSON.stringify(payload.structured, null, 2);
+    det.appendChild(pre);
+    div.appendChild(det);
+  }
+
+  $('thread').appendChild(div);
+  scrollToBottom();
+}
+
+function appendErrorBubble(text) {
+  const div = document.createElement('div');
+  div.className = 'bubble system';
+  div.textContent = text;
+  $('thread').appendChild(div);
+  scrollToBottom();
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'typing-dots';
+  div.id = 'typingIndicator';
+  div.innerHTML = `${L().typing} <span class="dot"></span><span class="dot"></span><span class="dot"></span>`;
+  $('thread').appendChild(div);
+  scrollToBottom();
+  return div;
+}
+
+function removeTyping() {
+  const el = $('typingIndicator');
+  if (el) el.remove();
+}
+
+// ── Send / receive ─────────────────────────────────────────────────────────
+async function sendMessage() {
+  if (sending) return;
+  const input = $('messageInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  sending = true;
+  $('sendBtn').disabled = true;
+  appendUserBubble(text);
+  input.value = '';
+  input.style.height = 'auto';
+  const typingEl = showTyping();
+
+  try {
+    const resp = await fetch('/v1/chat', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        message:        text,
+        lang:           activeLang,
+        conversationId: conversationId,
+        userName:       settings.userName || '',
+        email:          settings.email    || '',
+        phone:          settings.phone    || '',
+        country:        settings.country  || 'RW',
+        district:       settings.district || '',
+      }),
+    });
+    removeTyping();
+    if (!resp.ok) {
+      appendErrorBubble(L().networkError + ` (HTTP ${resp.status})`);
+      return;
+    }
+    const data = await resp.json();
+    if (data.conversationId) {
+      const isNew = data.conversationId !== conversationId;
+      setActiveConversation(data.conversationId);
+      // If this turn opened a new conversation row, refresh the
+      // sidebar so the new chat appears. For follow-up turns the
+      // existing row's lastActivityAt is bumped — also refresh, so
+      // the row floats to the top.
+      fetchChatsList();
+    }
+    if (data.llmOnline === false) {
+      $('offlineBadge').textContent = L().offlineBadge;
+      $('offlineBadge').style.display = '';
+    } else {
+      $('offlineBadge').style.display = 'none';
+    }
+    appendAssistantBubble(data);
+  } catch (e) {
+    removeTyping();
+    appendErrorBubble(L().networkError);
+  } finally {
+    sending = false;
+    $('sendBtn').disabled = false;
+    input.focus();
+  }
+}
+
+// ── Wiring ─────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+  // Restore the last active conversation id from localStorage so
+  // a refresh keeps the user in the same chat.
+  try {
+    const persisted = localStorage.getItem(ACTIVE_CONV_KEY);
+    if (persisted) conversationId = persisted;
+  } catch (e) { /* ignore */ }
+
+  renderStaticLabels();
+  // If there's a persisted active chat, replay its messages back
+  // into the thread; otherwise the welcome empty-state stays.
+  if (conversationId) openChat(conversationId);
+
+  // Chat input / send.
+  $('sendBtn').addEventListener('click', sendMessage);
+  $('messageInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  $('messageInput').addEventListener('input', (e) => {
+    e.target.style.height = 'auto';
+    e.target.style.height = Math.min(e.target.scrollHeight, 160) + 'px';
+  });
+
+  // Chats sidebar buttons.
+  $('newChatBtn').addEventListener('click', startNewChat);
+  $('openSettingsBtn').addEventListener('click', openSettingsModal);
+
+  // Modal: cancel / save / backdrop click.
+  $('modalCancelBtn').addEventListener('click', closeSettingsModal);
+  $('modalSaveBtn').addEventListener('click', saveSettingsModal);
+  $('settingsModalBackdrop').addEventListener('click', (e) => {
+    if (e.target === $('settingsModalBackdrop')) closeSettingsModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalPending !== null) closeSettingsModal();
+  });
+
+  // Modal field handlers — write into modalPending (NOT settings),
+  // so a Cancel discards the changes cleanly. Save commits.
+  $('settingName').addEventListener('input', (e) => {
+    if (modalPending) modalPending.userName = e.target.value;
+  });
+  $('settingEmail').addEventListener('input', (e) => {
+    if (!modalPending) return;
+    modalPending.email = e.target.value;
+    // Clear the error as the user types; re-validate on Save.
+    clearEmailError();
+  });
+  $('settingPhone').addEventListener('input', (e) => {
+    if (modalPending) modalPending.phone = e.target.value;
+  });
+  $('settingCountry').addEventListener('change', (e) => {
+    if (!modalPending) return;
+    modalPending.country = e.target.value;
+    refreshModalCountryWarn();
+  });
+  $('settingDistrict').addEventListener('change', (e) => {
+    if (modalPending) modalPending.district = e.target.value;
+  });
+
+  // Modal language pills — preview labels in modalPending.lang;
+  // commit happens on Save.
+  document.querySelectorAll('#settingsModal .lang-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      if (!modalPending) return;
+      modalPending.lang = p.dataset.lang;
+      document.querySelectorAll('#settingsModal .lang-pill').forEach(el => {
+        el.classList.toggle('active', el.dataset.lang === modalPending.lang);
+      });
+      renderModalLabels(modalPending.lang);
+      refreshModalCountryWarn();
+    });
+  });
+
+  if (!$('messageInput').disabled) $('messageInput').focus();
+});
+</script>
+
+</body>
+</html>

@@ -19,3 +19,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Additional notes:
+
+The clinical reference data seeded under `schema/02_seed_from_handbook.sql`
+is sourced from the Rwanda Biomedical Centre's 2024 Integrated Malaria
+Control Guidelines, and the teaching-mode baseline (`schema/09_who_baseline.sql`)
+is sourced from the WHO Global Malaria Programme Guidelines for Malaria (2024).
+Both source documents are publicly available from their respective publishers.
+MalariaChat redistributes this data only as reference material under fair use
+for educational purposes; the data itself is the property of RBC and WHO
+respectively, not of MalariaChat or its contributors.
+
+The LLM integration in `llm.abe` (Anthropic by default) requires the user to
+supply their own API key. No key is bundled with this software.

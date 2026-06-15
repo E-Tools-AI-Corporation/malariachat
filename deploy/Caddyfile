@@ -1,0 +1,48 @@
+# /etc/caddy/Caddyfile — malariaChat production
+#
+# Serves https://malariachat.org with auto Let's Encrypt TLS, reverse-
+# proxies to the Abe daemon on 127.0.0.1:8444, and applies a per-IP
+# rate limit of 60 requests/minute.
+#
+# Caddy's built-in distribution does NOT include rate limiting; we use
+# the `caddy-ratelimit` plugin (https://github.com/mholt/caddy-ratelimit).
+# `deploy/setup-ec2.sh` builds Caddy with that plugin via xcaddy on
+# first-time setup.
+
+{
+    # Global options
+    email antoinebigirimana@gmail.com         # used for Let's Encrypt account + expiry notices
+}
+
+malariachat.org, www.malariachat.org {
+    encode gzip
+
+    # Per-IP rate limit. The `caddy-ratelimit` plugin keys on
+    # {remote_host} (the real client IP after Caddy's proxy
+    # negotiation). 60 events per minute = 1 request/second average,
+    # bursty access tolerated up to the per-minute total.
+    rate_limit {
+        zone malariachat {
+            key    {remote_host}
+            events 60
+            window 1m
+        }
+    }
+
+    # Reverse proxy direct to the Abe daemon. The runtime's HTTP
+    # parser loops on read() until Content-Length bytes are received,
+    # so no separate request-buffering proxy hop is needed.
+    reverse_proxy 127.0.0.1:8444 {
+        header_up Host                {host}
+        header_up X-Real-IP           {remote_host}
+        header_up X-Forwarded-For     {remote_host}
+        header_up X-Forwarded-Proto   {scheme}
+    }
+
+    # Caddy access log goes to journalctl (visible via
+    # `sudo journalctl -u caddy -f`).
+    log {
+        output stdout
+        format json
+    }
+}
