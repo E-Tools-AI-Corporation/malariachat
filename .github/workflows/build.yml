@@ -1,0 +1,59 @@
+name: build
+
+# Verifies MalariaChat compiles against the Abe compiler — parse, type-check, and
+# codegen of malariachat.abe (and llm.abe, pulled in via its import). This is the
+# source-level "does it build" gate; producing a native binary additionally needs
+# the Abe runtime archives + system libs (libpq/hiredis/curl/ssl/argon2) and is
+# done at deploy time (see deploy/DEPLOY.md), not in this CI.
+#
+# The Abe compiler currently lives in a private repo, so this job needs a token
+# with read access to it. Add a repository secret named ABE_REPO_TOKEN (a
+# fine-grained PAT with Contents:read on Electronic-Tools-Company/abe). Without
+# the secret the job skips cleanly (e.g. on forks) rather than failing.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout MalariaChat
+        uses: actions/checkout@v4
+
+      - name: Gate on Abe-compiler access
+        id: gate
+        env:
+          ABE_TOKEN: ${{ secrets.ABE_REPO_TOKEN }}
+        run: |
+          if [ -z "$ABE_TOKEN" ]; then
+            echo "::notice::ABE_REPO_TOKEN not set — the Abe compiler repo is private; skipping the compile gate."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout the Abe compiler
+        if: steps.gate.outputs.skip == 'false'
+        uses: actions/checkout@v4
+        with:
+          repository: Electronic-Tools-Company/abe
+          ref: master
+          token: ${{ secrets.ABE_REPO_TOKEN }}
+          path: .abe
+
+      - name: Build abec2
+        if: steps.gate.outputs.skip == 'false'
+        run: make -C .abe
+
+      - name: Compile MalariaChat (parse + type-check + codegen)
+        if: steps.gate.outputs.skip == 'false'
+        run: |
+          .abe/bin/abec2 --emit-ll malariachat.abe > /dev/null
+          echo "MalariaChat compiles cleanly against Abe@master."
