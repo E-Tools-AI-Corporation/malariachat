@@ -339,7 +339,9 @@ narrative. This is the load-bearing surface for native-speaker review.
 
 You need:
 
-- A local Abe compiler build (the `abec` binary from the Abe repo)
+- The `abec` Abe compiler — a commercial product (see
+  [Compiler licensing](#compiler-licensing-abec)); an unlicensed evaluation
+  build is enough to compile this example
 - PostgreSQL 15+ running on `127.0.0.1:5432`
 - An LLM API key for the configured backend. For the default Anthropic
   backend, set `ANTHROPIC_API_KEY` in the environment, or point
@@ -432,6 +434,27 @@ What's not done in the current build, in priority order:
 See the in-repo design notes for the full list with context.
 
 ---
+
+## Compiler licensing (abec)
+
+MalariaChat itself is MIT-licensed (see below), but it is **built with `abec`,
+the Abe compiler — a commercial product of E-Tools AI Corporation**. The two are
+separate: this example is free and open; the compiler that turns `.abe` source
+into a native binary is licensed.
+
+- **Evaluation:** with no licence installed, `abec` still compiles — it prints an
+  `UNLICENSED EVALUATION` banner and works for a built-in trial window. That is
+  enough to build and study MalariaChat.
+- **Production / banner-free builds** require a licence. Install your licence
+  token in any one of these ways:
+  - write it to `~/.abe/license`
+  - `export ABEC_LICENSE="ABE1.…"`  (recommended for CI and containers)
+  - `export ABE_LICENSE_FILE=/path/to/license`
+  - precedence if more than one is present: `ABEC_LICENSE` → `ABE_LICENSE_FILE` →
+    `~/.abe/license`
+- `abec --version` always works without a licence.
+- To purchase a licence or request an extended evaluation, contact
+  **licensing@e-tools.ai**.
 
 ## Licence and contributions
 
