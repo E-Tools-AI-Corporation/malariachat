@@ -22,9 +22,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # abec enforces licensing; with no license it runs in eval grace mode — it
-  # compiles and prints an "UNLICENSED EVALUATION" banner (visible in the logs),
-  # which is fine for verifying that the example builds. No license secret needed.
+  # abec enforces licensing. CI supplies a dedicated, time-limited CI license
+  # via the ABEC_LICENSE secret, so builds are license-clean (no eval banner).
+  # If that secret is absent (e.g. a fork), abec falls back to eval grace mode
+  # — it still compiles, just with an "UNLICENSED EVALUATION" banner.
   ABEC_RELEASE_TAG: abec-2026.06.15-lic
 
 jobs:
@@ -61,6 +62,8 @@ jobs:
 
       - name: Compile MalariaChat (parse + type-check + codegen)
         if: steps.gate.outputs.skip == 'false'
+        env:
+          ABEC_LICENSE: ${{ secrets.ABEC_LICENSE }}
         run: |
           ./abec --emit-ll malariachat.abe > /dev/null
           echo "MalariaChat compiles cleanly with $ABEC_RELEASE_TAG."
