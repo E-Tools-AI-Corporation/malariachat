@@ -22,7 +22,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  ABEC_RELEASE_TAG: abec-2026.06.15
+  # abec enforces licensing; with no license it runs in eval grace mode — it
+  # compiles and prints an "UNLICENSED EVALUATION" banner (visible in the logs),
+  # which is fine for verifying that the example builds. No license secret needed.
+  ABEC_RELEASE_TAG: abec-2026.06.15-lic
 
 jobs:
   compile:
