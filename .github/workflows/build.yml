@@ -3,14 +3,12 @@ name: build
 # Verifies MalariaChat compiles against the Abe compiler — parse, type-check, and
 # codegen of malariachat.abe (and llm.abe, pulled in via its import). This is the
 # source-level "does it build" gate; producing a native binary additionally needs
-# the Abe runtime archives + system libs (libpq/hiredis/curl/ssl/argon2) and is
-# done at deploy time (see deploy/DEPLOY.md), not in this CI.
+# the Abe runtime archives + system libs and is done at deploy time, not here.
 #
-# abec is a commercial product, distributed as a gated prebuilt binary in the
-# private Electronic-Tools-Company/abe repo's Releases. CI DOWNLOADS that binary;
-# it never builds the compiler from source. This needs a repository secret
-# ABE_REPO_TOKEN (a fine-grained PAT with Contents:read on that repo). Without the
-# secret the job skips cleanly (e.g. on forks) instead of failing.
+# abec is downloaded from its PUBLIC release repo with no token, so this works on
+# forks too. abec enforces licensing: with the ABEC_LICENSE secret (a CI license)
+# it compiles silently; without it (e.g. a fork) it falls back to eval grace mode
+# — still compiles, just prints an "UNLICENSED EVALUATION" banner.
 
 on:
   push:
@@ -22,11 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # abec enforces licensing. CI supplies a dedicated, time-limited CI license
-  # via the ABEC_LICENSE secret, so builds are license-clean (no eval banner).
-  # If that secret is absent (e.g. a fork), abec falls back to eval grace mode
-  # — it still compiles, just with an "UNLICENSED EVALUATION" banner.
-  ABEC_RELEASE_TAG: abec-2026.06.15-lic
+  ABEC_RELEASE_TAG: v2026.06.15
 
 jobs:
   compile:
@@ -35,35 +29,19 @@ jobs:
       - name: Checkout MalariaChat
         uses: actions/checkout@v4
 
-      - name: Gate on Abe-compiler access
-        id: gate
-        env:
-          ABE_TOKEN: ${{ secrets.ABE_REPO_TOKEN }}
+      - name: Download abec (public release, no token)
         run: |
-          if [ -z "$ABE_TOKEN" ]; then
-            echo "::notice::ABE_REPO_TOKEN not set — the Abe compiler is private; skipping the compile gate."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Download the abec compiler (gated prebuilt)
-        if: steps.gate.outputs.skip == 'false'
-        env:
-          GH_TOKEN: ${{ secrets.ABE_REPO_TOKEN }}
-        run: |
-          gh release download "$ABEC_RELEASE_TAG" \
-            -R Electronic-Tools-Company/abe \
-            -p abec-linux-x86_64 -p SHA256SUMS
+          base="https://github.com/E-Tools-AI-Corporation/abec/releases/download/${ABEC_RELEASE_TAG}"
+          curl -fsSL -O "$base/abec-linux-x86_64"
+          curl -fsSL -O "$base/SHA256SUMS"
           sha256sum -c SHA256SUMS
           chmod +x abec-linux-x86_64
           mv abec-linux-x86_64 abec
           ./abec --version
 
       - name: Compile MalariaChat (parse + type-check + codegen)
-        if: steps.gate.outputs.skip == 'false'
         env:
           ABEC_LICENSE: ${{ secrets.ABEC_LICENSE }}
         run: |
           ./abec --emit-ll malariachat.abe > /dev/null
-          echo "MalariaChat compiles cleanly with $ABEC_RELEASE_TAG."
+          echo "MalariaChat compiles cleanly with abec $ABEC_RELEASE_TAG."
