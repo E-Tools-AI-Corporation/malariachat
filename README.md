@@ -337,11 +337,22 @@ narrative. This is the load-bearing surface for native-speaker review.
 
 ## Building MalariaChat locally
 
+> **Toolchain news.** The latest Abe compiler is **`abec` 0.2.0**
+> ([`v2026.06.21`](https://github.com/E-Tools-AI-Corporation/abec/releases/latest)) —
+> it adds a complete, native machine-learning toolchain (tensors, layers/models,
+> transformer attention, inference + training, quantization, GPU, ONNX, and more;
+> see the 22-chapter
+> [ML manual](https://github.com/E-Tools-AI-Corporation/abec/releases/latest/download/ABE-Pro-ML-Manual-0.2.0.md)).
+> MalariaChat builds unchanged on 0.2.0; its clinical answers stay deterministic
+> SQL by design, so it doesn't depend on the ML features.
+
 You need:
 
 - The `abec` Abe compiler — a commercial product (see
   [Compiler licensing](#compiler-licensing-abec)); an unlicensed evaluation
-  build is enough to compile this example
+  build is enough to compile this example. Get the latest Linux x86-64 build from
+  [the abec releases page](https://github.com/E-Tools-AI-Corporation/abec/releases/latest)
+  (or the [bundle](https://github.com/E-Tools-AI-Corporation/abec/releases/latest/download/abec-0.2.0-linux-x86_64.tar.gz) with the runtime included)
 - PostgreSQL 15+ running on `127.0.0.1:5432`
 - An LLM API key for the configured backend. For the default Anthropic
   backend, set `ANTHROPIC_API_KEY` in the environment, or point
