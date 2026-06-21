@@ -34,7 +34,9 @@ jobs:
           base="https://github.com/E-Tools-AI-Corporation/abec/releases/download/${ABEC_RELEASE_TAG}"
           curl -fsSL -O "$base/abec-linux-x86_64"
           curl -fsSL -O "$base/SHA256SUMS"
-          sha256sum -c SHA256SUMS
+          # SHA256SUMS lists every release asset (binary + tarballs); we only
+          # download the bare binary, so verify just that and ignore the rest.
+          sha256sum --ignore-missing -c SHA256SUMS
           chmod +x abec-linux-x86_64
           mv abec-linux-x86_64 abec
           ./abec --version
