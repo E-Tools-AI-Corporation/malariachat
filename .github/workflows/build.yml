@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  ABEC_RELEASE_TAG: v2026.06.16
+  ABEC_RELEASE_TAG: v2026.06.21
 
 jobs:
   compile:
